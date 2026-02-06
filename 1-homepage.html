@@ -138,78 +138,14 @@
     <main class="main">
       <section class="quotes section d-flex align-items-center">
         <div class="container">
+          <div id="quotes-loader" class="loader"></div>
           <div
             id="carouselExampleControls"
-            class="carousel slide"
+            class="carousel slide d-none"
             data-ride="carousel"
           >
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="row mx-auto align-items-center">
-                  <div class="col-12 col-sm-2 col-lg-2 offset-lg-1 text-center">
-                    <img
-                      src="images/profile_5.jpg"
-                      class="d-block align-self-center"
-                      alt="Carousel Pic 1"
-                    />
-                  </div>
-                  <div class="col-12 col-sm-7 offset-sm-2 col-lg-9 offset-lg-0">
-                    <div class="quote-text">
-                      <p class="text-white">
-                        « Those tutorials are concise and go straight to the
-                        point. I can’t think of a better place to learn smiling.
-                        And it’s so fun!
-                      </p>
-                      <h4 class="text-white font-weight-bold">Person Name</h4>
-                      <span class="text-white">weather presenter</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row mx-auto align-items-center">
-                  <div class="col-12 col-sm-2 col-lg-2 offset-lg-1 text-center">
-                    <img
-                      src="images/profile_5.jpg"
-                      class="d-block align-self-center"
-                      alt="Carousel Pic 1"
-                    />
-                  </div>
-                  <div class="col-12 col-sm-7 offset-sm-2 col-lg-9 offset-lg-0">
-                    <div class="quote-text">
-                      <p class="text-white">
-                        « Those tutorials are concise and go straight to the
-                        point. I can’t think of a better place to learn smiling.
-                        And it’s so fun!
-                      </p>
-                      <h4 class="text-white font-weight-bold">Person Name</h4>
-                      <span class="text-white">weather presenter</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row mx-auto align-items-center">
-                  <div class="col-12 col-sm-2 col-lg-2 offset-lg-1 text-center">
-                    <img
-                      src="images/profile_5.jpg"
-                      class="d-block align-self-center"
-                      alt="Carousel Pic 1"
-                    />
-                  </div>
-                  <div class="col-12 col-sm-7 offset-sm-2 col-lg-9 offset-lg-0">
-                    <div class="quote-text">
-                      <p class="text-white">
-                        « Those tutorials are concise and go straight to the
-                        point. I can’t think of a better place to learn smiling.
-                        And it’s so fun!
-                      </p>
-                      <h4 class="text-white font-weight-bold">Person Name</h4>
-                      <span class="text-white">weather presenter</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="carousel-inner" id="quotes-carousel-inner">
+              <!-- Quotes will be loaded here dynamically -->
             </div>
             <a
               class="carousel-control-prev arrow-left"
@@ -240,6 +176,47 @@
           </div>
         </div>
       </section>
+        <script>
+          $(document).ready(function () {
+            // Show loader
+            $('#quotes-loader').show();
+            $('#carouselExampleControls').addClass('d-none');
+
+            $.ajax({
+              url: 'https://smileschool-api.hbtn.info/quotes',
+              method: 'GET',
+              success: function (data) {
+                var carouselInner = $('#quotes-carousel-inner');
+                carouselInner.empty();
+                data.forEach(function (quote, idx) {
+                  var item = $('<div class="carousel-item' + (idx === 0 ? ' active' : '') + '"></div>');
+                  var row = $('<div class="row mx-auto align-items-center"></div>');
+                  var imgCol = $('<div class="col-12 col-sm-2 col-lg-2 offset-lg-1 text-center"></div>');
+                  var img = $('<img class="d-block align-self-center" alt="Carousel Pic">');
+                  img.attr('src', quote.pic_url);
+                  imgCol.append(img);
+                  var textCol = $('<div class="col-12 col-sm-7 offset-sm-2 col-lg-9 offset-lg-0"></div>');
+                  var quoteText = $('<div class="quote-text"></div>');
+                  quoteText.append('<p class="text-white">« ' + quote.text + ' »</p>');
+                  quoteText.append('<h4 class="text-white font-weight-bold">' + quote.name + '</h4>');
+                  quoteText.append('<span class="text-white">' + quote.title + '</span>');
+                  textCol.append(quoteText);
+                  row.append(imgCol).append(textCol);
+                  item.append(row);
+                  carouselInner.append(item);
+                });
+                // Hide loader, show carousel
+                $('#quotes-loader').hide();
+                $('#carouselExampleControls').removeClass('d-none');
+              },
+              error: function () {
+                $('#quotes-loader').hide();
+                $('#quotes-carousel-inner').html('<div class="text-white text-center">Failed to load quotes.</div>');
+                $('#carouselExampleControls').removeClass('d-none');
+              }
+            });
+          });
+        </script>
     </main>
   </body>
 </html>
