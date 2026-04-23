@@ -920,3 +920,59 @@
     transform: rotate(360deg);
   }
 }
+#popularCarousel .carousel-inner {
+  overflow: hidden;
+}
+
+#popularCarousel .carousel-item {
+  transition: transform 0.5s ease;
+}
+
+#popularCarousel .carousel-item > div {
+  float: left;
+}
+
+/* Desktop: 4 cards visibles, déplacement d'1 card */
+@media (min-width: 992px) {
+  #popularCarousel .carousel-item-right.active,
+  #popularCarousel .carousel-item-next {
+    transform: translateX(25%);
+  }
+
+  #popularCarousel .carousel-item-left.active,
+  #popularCarousel .carousel-item-prev {
+    transform: translateX(-25%);
+  }
+}
+
+/* Tablet: 2 cards visibles, déplacement d'1 card */
+@media (min-width: 576px) and (max-width: 991.98px) {
+  #popularCarousel .carousel-item-right.active,
+  #popularCarousel .carousel-item-next {
+    transform: translateX(50%);
+  }
+
+  #popularCarousel .carousel-item-left.active,
+  #popularCarousel .carousel-item-prev {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile: 1 card visible */
+@media (max-width: 575.98px) {
+  #popularCarousel .carousel-item-right.active,
+  #popularCarousel .carousel-item-next {
+    transform: translateX(100%);
+  }
+
+  #popularCarousel .carousel-item-left.active,
+  #popularCarousel .carousel-item-prev {
+    transform: translateX(-100%);
+  }
+}
+
+/* Empêche Bootstrap de cacher les items clonés */
+#popularCarousel .carousel-item-right,
+#popularCarousel .carousel-item-left {
+  transform: translateX(0);
+}
